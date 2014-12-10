@@ -17,7 +17,7 @@ while not valid:
 
 pic = pic.astype(int)
 pic_x, pic_y, pic_z = np.atleast_3d(pic).shape
-print "\nEnter the sample you want to downsample the picture by."
+print "\nEnter the factor you want to downsample the picture by."
 print "Note: make sure the factor is a power of two and works"
 print "with the dimensions of the image provided.\n"
 
