@@ -31,8 +31,8 @@ while not valid:
 	if not valid:
 		print "That was not a valid factor."
 
-scaleNum = int(np.log2(scaleNum))
-for i in range(scaleNum):
+timesToScale = int(np.log2(scaleNum))
+for i in range(timesToScale):
 	pic = pic[::2, ::2] + pic[1::2, ::2] + pic[::2, 1::2] + pic[1::2, 1::2]
 
 graph = image.img_to_graph(pic)
@@ -52,21 +52,18 @@ while not valid:
 
 print "Working..."
 
-for assign_labels in ('kmeans', 'discretize'):
-    t0 = time.time()
-    labels = spectral_clustering(graph, n_clusters=N_REGIONS,
-                                 assign_labels=assign_labels,
-                                 random_state=1)
-    t1 = time.time()
-    labels = labels.reshape(pic.shape)
-
-    plt.figure(figsize=(5, 5))
-    plt.imshow(pic,   cmap=plt.cm.gray)
-    for l in range(N_REGIONS):
-        plt.contour(labels == l, contours=1,
-                    colors=[plt.cm.spectral(l / float(N_REGIONS)), ])
-    plt.xticks(())
-    plt.yticks(())
-    plt.title('Spectral clustering: %s, %.2fs' % (assign_labels, (t1 - t0)))
+startTime = time.time()
+labels = spectral_clustering(graph, n_clusters=N_REGIONS,
+                             random_state=1)
+finishTime = time.time()
+labels = labels.reshape(pic.shape)
+plt.figure(figsize=(5, 5))
+plt.imshow(pic,   cmap=plt.cm.gray)
+for l in range(N_REGIONS):
+    plt.contour(labels == l, contours=1,
+                colors=[plt.cm.spectral(l / float(N_REGIONS)), ])
+plt.xticks(())
+plt.yticks(())
+plt.title('Downsampling: %d, Clusters %d, Total Time: %f.2' % (scaleNum, N_REGIONS, (finishTime - startTime)))
 
 plt.show()
